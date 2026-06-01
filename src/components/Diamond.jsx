@@ -37,8 +37,7 @@ export function Diamond({ position, rotation, ...props }) {
     [],
   );
 
-  useFrame((state, delta) => {
-    delta = Math.min(0.1, delta);
+  useFrame((state) => {
     const t = state.clock.getElapsedTime();
 
     const currentTranslation = api.current
