@@ -3,7 +3,7 @@ import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { RigidBody, BallCollider } from "@react-three/rapier";
 
-export function Pointer() {
+export function Pointer({ isMobile }) {
   const ref = useRef(null);
   const vec = useMemo(() => new THREE.Vector3(), []);
 
@@ -41,7 +41,7 @@ export function Pointer() {
       colliders={false}
       ref={ref}
     >
-      <BallCollider args={[0.5]} />
+      <BallCollider args={[isMobile ? 0.25 : 0.5]} />
     </RigidBody>
   );
 }

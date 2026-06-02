@@ -1,14 +1,22 @@
 import { Canvas } from "@react-three/fiber";
 import { Bloom, EffectComposer, N8AO } from "@react-three/postprocessing";
 import { Physics } from "@react-three/rapier";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { Diamond } from "./Diamond";
 import { Pointer } from "./Pointer";
 
-import { useControls } from 'leva';
+import { useControls } from "leva";
 
 export default function HeroCanvas(props) {
-  const bloomConfig = useControls('Bloom', {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const bloomConfig = useControls("Bloom", {
     mipmapBlur: true,
     luminanceThreshold: { value: 10, min: 0, max: 10, step: 0.1 },
     intensity: { value: 1, min: 0, max: 10, step: 0.1 },
@@ -17,7 +25,6 @@ export default function HeroCanvas(props) {
 
   return (
     <Canvas
-      frameloop="demand"
       shadows
       dpr={[1, 1.5]}
       gl={{
@@ -29,10 +36,10 @@ export default function HeroCanvas(props) {
       <color attach="background" args={["#000000"]} />
       <Suspense fallback={null}>
         <Physics gravity={[0, 0, -5]}>
-          <Pointer />
+          <Pointer isMobile={isMobile} />
 
           {Array.from({ length: 10 }).map((_, i) => (
-            <Diamond key={i} scale={0.5} />
+            <Diamond key={i} scale={isMobile ? 0.35 : 0.5} isMobile={isMobile} />
           ))}
         </Physics>
 

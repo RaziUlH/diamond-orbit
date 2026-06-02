@@ -1,28 +1,29 @@
-import { MeshRefractionMaterial, useGLTF } from "@react-three/drei";
+import { MeshRefractionMaterial } from "@react-three/drei";
+import { useCachedGLTF } from "../hooks/useCachedGLTF";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { RigidBody } from "@react-three/rapier";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { RGBELoader } from "three-stdlib";
 
-import { useControls } from 'leva';
+import { useControls } from "leva";
 
-export function Diamond({ position, rotation, ...props }) {
+export function Diamond({ position, rotation, isMobile, ...props }) {
   const ref = useRef(null);
   const api = useRef(null);
-  const { nodes } = useGLTF("/3d/dflat.glb");
+  const { nodes } = useCachedGLTF("/3d/dflat.glb");
   const r = THREE.MathUtils.randFloatSpread;
   const pos = useMemo(
-    () => position || [r(2), r(2), r(2)],
-    [position, r],
+    () => position || [r(isMobile ? 1 : 2), r(isMobile ? 1 : 2), r(isMobile ? 1 : 2)], 
+    [position, r, isMobile]
   );
-  
+
   const texture = useLoader(
     RGBELoader,
     "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/aerodynamics_workshop_1k.hdr",
   );
-  
-  const config = useControls('Diamond Material', {
+
+  const config = useControls("Diamond Material", {
     bounces: { value: 3, min: 1, max: 10, step: 1 },
     aberrationStrength: { value: 0.015, min: 0.001, max: 0.1, step: 0.001 },
     ior: { value: 2.42, min: 1, max: 3, step: 0.01 },
@@ -89,4 +90,4 @@ export function Diamond({ position, rotation, ...props }) {
   );
 }
 
-useGLTF.preload("/3d/dflat.glb");
+useCachedGLTF.preload("/3d/dflat.glb");
