@@ -6,3 +6,35 @@ body, html, #root {
   overflow: hidden;
   background-color: #000000;
 }
+
+.ui-overlay {
+  padding: 40px;
+}
+
+.ui-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.ui-socials {
+  pointer-events: auto;
+  display: flex;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .ui-overlay {
+    padding: 24px;
+  }
+
+  .ui-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .ui-socials {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
